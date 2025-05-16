@@ -99,11 +99,11 @@ bitool/
 
 | 작업                       | 설명                              |
 | ------------------------ | ------------------------------- |
-| `git read-tree`          | 다른 저장소를 하위 폴더로 가져오며 커미트 히스토리 유지 |
-| `git remote add / fetch` | 외부 저장소 연결 및 커미트 이력 가져오기         |
-| `--prefix=...` 옵션        | 밀혔 시 대상 디렉토리 지정                 |
-| `git commit`             | 밀혔 결과를 현재 레포지토리에 반영             |
-| `git remote remove`      | 밀혔 후 원격 정리 (uc5c6어도 되는 변수)      |
+| `git read-tree`          | 다른 저장소를 하위 폴더로 가져오며 commit 히스토리 유지 |
+| `git remote add / fetch` | 외부 저장소 연결 및 commit 이력 가져오기         |
+| `--prefix=...` 옵션        | 저장할 대상 디렉토리 지정                 |
+| `git commit`             | 결과를 현재 레포지토리에 반영             |
+| `git remote remove`      | 원격 remote 정리       |
 
 ---
 
