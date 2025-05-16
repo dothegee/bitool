@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<!-- Maven 프로젝트 모델 버전 (항상 4.0.0으로 고정됨) -->
+	<modelVersion>4.0.0</modelVersion>
+
+	<!-- Spring Boot의 부모 POM을 상속 (공통 설정과 버전 자동 관리) -->
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.4.4</version>
+		<relativePath/> <!-- 로컬 repository에서 상위 pom.xml을 찾지 않도록 설정 -->
+	</parent>
+
+	<!-- 이 프로젝트의 기본 정보 (도메인 + 이름 + 버전) -->
+	<groupId>com.jinu</groupId>
+	<artifactId>bitool</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>bitool</name>
+	<description>bitool</description>
+
+	<!-- 기타 메타데이터 (공란으로 유지 가능) -->
+	<url/>
+	<licenses>
+		<license/>
+	</licenses>
+	<developers>
+		<developer/>
+	</developers>
+	<scm>
+		<connection/>
+		<developerConnection/>
+		<tag/>
+		<url/>
+	</scm>
+
+	<!-- 사용할 Java 버전 명시 -->
+	<properties>
+		<java.version>21</java.version>
+	</properties>
+
+	<!-- 사용할 라이브러리(의존성) 목록 -->
+	<dependencies>
+
+		<!-- JPA + Hibernate를 이용한 ORM (데이터베이스 연동) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+
+		<!-- 웹 서버와 REST API 기능을 위한 Spring Web 모듈 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<!-- 개발 중 서버 자동 재시작, LiveReload 등을 지원하는 개발 편의 도구 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope> <!-- 배포 시에는 제외되고 실행 중에만 적용 -->
+			<optional>true</optional>
+		</dependency>
+
+		<!-- PostgreSQL 데이터베이스와 연결할 수 있는 JDBC 드라이버 -->
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope> <!-- 애플리케이션 실행 중에만 필요 -->
+		</dependency>
+
+		<!-- Lombok: getter/setter/toString 등을 자동 생성해주는 코드 유틸 -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional> <!-- 컴파일 시만 필요, 런타임엔 필요 없음 -->
+		</dependency>
+
+		<!-- 단위 테스트, 통합 테스트를 위한 라이브러리 (JUnit5, AssertJ 등 포함) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope> <!-- 테스트 실행시에만 포함됨 -->
+		</dependency>
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.2.0</version>
+		</dependency>
+
+		<!-- AOP -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
+	</dependencies>
+
+	<!-- Maven 빌드 시 사용할 플러그인 설정 -->
+	<build>
+		<plugins>
+
+			<!-- Java 코드를 컴파일할 때 어떤 설정을 사용할지 정의 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<!-- 어노테이션 프로세서 (Lombok 사용 시 필수) -->
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</path>
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
+
+			<!-- Spring Boot 애플리케이션을 빌드하고 실행 가능하게 만들어주는 플러그인 -->
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<!-- 빌드된 JAR에서 Lombok은 제외 (런타임엔 필요 없음) -->
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
+</project>

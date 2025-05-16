@@ -1,0 +1,26 @@
+<configuration>
+    <!-- 프론트 로그 저장용 Appender -->
+    <appender name="FRONT_LOG" class="ch.qos.logback.core.FileAppender">
+        <file>logs/frontend.log</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 프론트 로그 컨트롤러에만 적용 -->
+    <logger name="com.jinu.bitool.controller.FrontLogController" level="INFO" additivity="false">
+        <appender-ref ref="FRONT_LOG" />
+    </logger>
+
+    <!-- 나머지 백엔드 로그 -->
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>logs/bitool.log</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="FILE" />
+    </root>
+</configuration>
