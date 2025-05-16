@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8080:8080"
+    # depends_on:
+    #   - db
+    environment: # application.properties에 ${}로 설정된 값을 이곳에서 주입함
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/bitool_db
+      #postgresql://db:5432/bitool_db
+      - SPRING_DATASOURCE_USERNAME=jinushin
+      - SPRING_DATASOURCE_PASSWORD=bitool_db
+# 도커 DB 사용하지 않기 때문에 주석 처리
+  # db:
+  #   image: postgres:15
+  #   environment:
+  #     POSTGRES_DB: bitool_db
+  #     POSTGRES_USER: jinushin
+  #     POSTGRES_PASSWORD: bitool_db
+  #   ports:
+  #     - "15432:5432" # 호스트 포트 : 컨테이너 포트
+  #     # 로컬 5432 포트는 프로세스가 점유중이기 때문에 15432로 바꿈
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:80"  # React 개발 포트는 3000, Nginx는 80 포트에서 제공
+    depends_on:
+      - backend
