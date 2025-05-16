@@ -107,7 +107,135 @@ bitool/
 
 ---
 
-# 2. 도커
+# 2. 📦 bitool Docker 구성 전체 정리
 
+---
 
+## 📁 프로젝트 구조
 
+```
+bitool/
+├── bitool_back/        # 백엔드 (Spring Boot)
+│   ├── src/
+│   ├── pom.xml
+│   ├── Dockerfile ✅
+├── bitool_front/       # 프론트 (React)
+│   ├── src/
+│   ├── public/
+│   ├── package.json
+│   ├── Dockerfile ✅
+│   └── .env.production ✅
+├── docker-compose.yml ✅
+```
+
+---
+
+## ✅ 1. 프론트 `.env.production`
+
+📄 `bitool_front/.env.production`
+
+```env
+REACT_APP_API_URL=http://localhost:8080/api
+```
+
+---
+
+## ✅ 2. 프론트 `Dockerfile`
+
+📄 `bitool_front/Dockerfile`
+
+```Dockerfile
+FROM node:20-alpine as build
+WORKDIR /app
+COPY . .
+RUN npm install && npm run build
+
+FROM nginx:stable-alpine
+COPY --from=build /app/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+---
+
+## ✅ 3. 백엔드 `Dockerfile`
+
+📄 `bitool_back/Dockerfile`
+
+```Dockerfile
+FROM eclipse-temurin:21-jdk-alpine
+WORKDIR /app
+COPY target/bitool-0.0.1-SNAPSHOT.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
+```
+
+---
+
+## ✅ 4. `docker-compose.yml`
+
+📄 루트 디렉토리 `docker-compose.yml`
+
+```yaml
+services:
+  backend:
+    build:
+      context: ./bitool_back
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/bitool
+      - SPRING_DATASOURCE_USERNAME=jinushin
+      - SPRING_DATASOURCE_PASSWORD=bitool_db
+
+  frontend:
+    build:
+      context: ./bitool_front
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+```
+
+---
+
+## ✅ 5. Spring Boot `application.properties`
+
+📄 `bitool_back/src/main/resources/application.properties`
+
+```properties
+spring.datasource.url=${SPRING_DATASOURCE_URL}
+spring.datasource.username=${SPRING_DATASOURCE_USERNAME}
+spring.datasource.password=${SPRING_DATASOURCE_PASSWORD}
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+```
+
+---
+
+## ✅ 6. 실행 명령어 정리
+
+```bash
+# 1. 프론트 빌드
+cd bitool_front
+npm install
+npm run build
+
+# 2. 도커 전체 실행 (루트에서)
+cd ..
+docker compose up --build
+```
+
+---
+
+## 🧪 테스트 주소
+
+| 항목 | 주소 |
+|------|------|
+| React 프론트 | http://localhost:3000 |
+| Spring Boot API | http://localhost:8080/api/... |
+
+---
